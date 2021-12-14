@@ -1,0 +1,4 @@
+acc.py
+__pycache__/*
+testcases/__pycache__/*
+.git/*
