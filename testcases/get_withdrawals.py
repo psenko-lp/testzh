@@ -1,2 +1,5 @@
-def testcase():
-    return 'GET', '/withdrawals/requests', {}
+def testcase(mode = '', result = {}):
+    if mode == 'verify':
+        pass # returns True if result as expected
+    else:
+        return 'GET', '/withdrawals/requests', {}

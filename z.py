@@ -90,15 +90,15 @@ def load_args(argv):
 
     if options.account is not None:
         account = options.account
-        print(f"Account name: {account}")
+        print(f"Account: {account}")
     
     if options.testcase is not None:
         testcase = options.testcase
-        print(f"Account name: {testcase}")
+        print(f"Testcase: {testcase}")
 
     if options.printout is not None:
         printout = options.printout
-        print(f"Account name: {printout}")
+        print(f"Printout: {printout}")
 
 
 def get_options(args=sys.argv[1:]):
@@ -119,14 +119,21 @@ def main(argv):
     PASSPHRASE = acc[account]['PASSPHRASE']
 
     testmodule = importlib.import_module("testcases.%s" % testcase)
-    method, url, body = testmodule.testcase()
+    method, url, body = testmodule.testcase() # 'verify' arg if need to verify testcase
 
     q = make_seed_request(method, url, body)
     if printout == 'json':
         print(q.json())
     else:
-        print(q.status_code)
-    
+        print(q.status_code) # 200 if success
+
+    if testcase in ['buy_crypto', 'sell_crypto']:
+        method, url, body = testmodule.testcase('POST', q.json()['message'])
+        q = make_seed_request(method, url, body)
+        if printout == 'json':
+            print(q.json())
+        else:
+            print(q.status_code)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
